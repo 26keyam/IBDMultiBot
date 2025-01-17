@@ -13,8 +13,7 @@ from langgraph.checkpoint.memory import MemorySaver
 import base64
 import os
 import streamlit as st
-
-import ibd_prompts as ibd_pt
+import prompts as ibd_pt
 
 # constants
 TEXT_MODEL = "text-embedding-ada-002"
