@@ -58,7 +58,7 @@ These queries seek objective data or general knowledge about IBD, such as causes
 
 Personal Inquiries: 
 
-These queries focus specifically on understanding symptoms experienced by an individual associated with IBD. Examples include:
+These queries focus specifically on understanding symptoms experienced by an individual associated with IBD or enquiring the food allergies if a meal plan is enquired about. Examples include:
 
 1. "I am a Crohn's patient, what is a recommended meal plan I could follow for a week?"
 2. "What fruits are good to eat if I have just been diagnosed with Ulcerative Colitis?"
