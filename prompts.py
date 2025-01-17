@@ -56,7 +56,7 @@ These queries seek objective data or general knowledge about IBD, such as causes
 
 Symptom Inquiry: 
 
-These queries focus specifically on understanding symptoms experienced by an individual, general symptoms associated with IBD, or potential nutrional plans an IBD patient can begin. Examples include:
+These queries focus specifically on understanding symptoms experienced by an individual or general symptoms associated with IBD. Examples include:
 
 1. "Are abdominal pain and fatigue symptoms of IBD?"
 2. "What are the early signs of Crohn’s disease?"
