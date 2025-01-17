@@ -110,7 +110,7 @@ def answer_generator(state: BotState, config: RunnableConfig):
     messages = state["messages"]
 
     # generate the prompt as a system message
-    system_message_prompt = [SystemMessage(ibd_pt.ANSWER_INSTRUCTIONS.format(context = searched_context ))]
+    system_message_prompt = [SystemMessage(ibd_pt.ANSWER_INSTRUCTIONS_CHAT.format(context = searched_context ))]
     # invoke the llm
     answer = llm.invoke(system_message_prompt + messages, config)
 
