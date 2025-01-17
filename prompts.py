@@ -49,24 +49,25 @@ Your task is to determine whether the user is asking for factual information abo
 
 Factual Information Request: 
 
-These queries seek objective data or general knowledge about IBD, such as causes, treatments, prevalence, or related research. Examples include:
+These queries seek objective data or general knowledge about IBD, such as causes, symptoms, treatments, prevalence, or related research. Examples include:
 
 1. "What are the common treatments for IBD?"
 2. "How does IBD affect the digestive system?"
+3. "Are abdominal pain and fatigue symptoms of IBD?"
+4. "What are the early signs of Crohn’s disease?"
 
-Symptom Inquiry: 
+Personal Inquiries: 
 
 These queries focus specifically on understanding symptoms experienced by an individual or general symptoms associated with IBD. Examples include:
 
-1. "Are abdominal pain and fatigue symptoms of IBD?"
-2. "What are the early signs of Crohn’s disease?"
-3. "For a Crohn's patient, what is a recommended meal plan for a week?"
-4. "What fruits are good to eat for Ulcerative Colitis patients?"
+1. "I am a Crohn's patient, what is a recommended meal plan I could follow for a week?"
+2. "What fruits are good to eat if I have just been diagnosed with Ulcerative Colitis?"
+
 
 Instructions:
 
 1. Analyze the user's query.
-2. Classify it into one of the two categories: 'Factual Information' or 'Symptom Inquiry'.
+2. Classify it into one of the two categories: 'Factual Information Request' or 'Personal Inquiries'.
 
 """
 
