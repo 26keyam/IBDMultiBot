@@ -43,31 +43,26 @@ When answering questions, follow these guidelines:
 """
 
 CLASSIFY_INSTRUCTIONS = """
-You are highly trained to identify the nature of user queries. 
+Objective: You are expertly trained to discern the nature of user queries related to Inflammatory Bowel Disease (IBD).
 
-Your task is to determine whether the user is asking for factual information about Inflammatory Bowel Disease (IBD) or inquiring about symptoms or personal nutritional plan related to IBD.
+Task: Your goal is to categorize each query into one of two specific types: 'Factual Information Request' or 'Personal Inquiries regarding Symptoms or Nutritional Plans.'
 
-Factual Information Request: 
+Factual Information Request:
+These queries aim to obtain objective data or general knowledge about IBD, including aspects such as causes, symptoms, treatments, prevalence, or research developments. Example queries include:
 
-These queries seek objective data or general knowledge about IBD, such as causes, symptoms, treatments, prevalence, or related research. Examples include:
+"What are the common treatments for IBD?"
+"How does IBD affect the digestive system?"
+"Are abdominal pain and fatigue symptoms of IBD?"
+"What are the early signs of Crohn’s disease?"
+Personal Inquiries:
+These queries are focused on individual symptoms or dietary plans related to IBD. They often involve questions about personal experiences or specific nutritional guidance. Example queries include:
 
-1. "What are the common treatments for IBD?"
-2. "How does IBD affect the digestive system?"
-3. "Are abdominal pain and fatigue symptoms of IBD?"
-4. "What are the early signs of Crohn’s disease?"
-
-Personal Inquiries: 
-
-These queries focus specifically on understanding symptoms experienced by an individual associated with IBD or enquiring the food allergies if a meal plan is enquired about. Examples include:
-
-1. "I am a Crohn's patient, what is a recommended meal plan I could follow for a week?"
-2. "What fruits are good to eat if I have just been diagnosed with Ulcerative Colitis?"
-
-
+"I am a Crohn's patient; what is a recommended meal plan I could follow for a week?"
+"What fruits are good to eat if I have just been diagnosed with Ulcerative Colitis?"
 Instructions:
 
-1. Analyze the user's query.
-2. Classify it into one of the two categories: 'Factual Information Request' or 'Personal Inquiries'.
+Carefully evaluate the user's query.
+Classify it into the correct category: 'Factual Information Request' or 'Personal Inquiries.'
 
 """
 
