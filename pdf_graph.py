@@ -1,3 +1,4 @@
+import PyPDF2
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
@@ -9,12 +10,14 @@ from openai import OpenAI
 from langgraph.graph import START, END, StateGraph
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import MemorySaver
-
+import base64
+import os
 import streamlit as st
 import prompts as pt
-import os
-import base64
-import PyPDF2
+
+TEXT_MODEL = "text-embedding-ada-002"
+NAMESPACE_KEY = "Keya"
+LLM_MODEL = "gpt-4o-mini"
 
 os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]
 os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
@@ -23,10 +26,6 @@ os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN_PROJECT"]
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 os.environ["PINECONE_API_KEY"]= st.secrets["PINECONE_API_KEY"]
 os.environ["INDEX_HOST"]= st.secrets["INDEX_HOST"]
-
-# constants
-TEXT_MODEL = "text-embedding-ada-002"
-LLM_MODEL = "gpt-4o-mini"
 
 # set the openai model
 llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
@@ -38,10 +37,14 @@ class BotState(MessagesState):
     pdf_path: str
     content: str
     accept_content: bool
+    answer: str
 
 
 class PdfChecker(BaseModel):
-    pdf_related: bool = Field(None, description = "True if the pdf is about IBD else False")
+    pdf_related: bool = Field(None, description = "True if the pdf is about IBD disease else False")
+
+
+import PyPDF2
 
 def extract_text_from_pdf(pdf_path: str) -> str:
     pdf_text = ""
@@ -63,6 +66,7 @@ def pdf_data_extractor(state: BotState):
 
     return {"content": extracted_text}
 
+
 def ibd_tester(state: BotState):
     extracted_pdf_text = state["content"]
 
@@ -74,24 +78,26 @@ def ibd_tester(state: BotState):
 
     # invoke the llm
     invoke_results = structured_llm.invoke(system_message_prompt)
+    print("IBD TESTER", invoke_results.pdf_related)
 
     return {"accept_content": invoke_results.pdf_related}
 
-def user_guider(state: BotState):
+def user_guider(state: BotState, config: RunnableConfig):
     # invoke the llm
-    invoke_image_query = llm.invoke([SystemMessage(content=pt.GUIDANCE_INSTRUCTIONS)])
+    invoke_image_query = llm.invoke([SystemMessage(content=pt.GUIDANCE_INSTRUCTIONS)], config)
 
-    return {"content":invoke_image_query.content }
+    return {"answer":invoke_image_query.content }
+
 
 def conditional_checker(state: BotState):
     content_status = state["accept_content"]
 
     if content_status:
-        return END
+        return "answer_generator"
 
     return "guidelines_generator"
 
-# give extracted content from pdf in pdf graph
+
 def answer_generator(state: BotState, config: RunnableConfig):
     pdf_context = state["content"]
     messages = state["messages"]
@@ -117,19 +123,21 @@ helper_builder.add_conditional_edges("ibd_tester", conditional_checker, ["answer
 helper_builder.add_edge("guidelines_generator", END)
 helper_builder.add_edge("answer_generator", END)
 
-
 # compile the graph
 helper_graph = helper_builder.compile()
 
 async def graph_streamer(pdf_path: str, user_query: str):
+    # nodes to stream
+    # two nodes are there because we are conditionally streaming
     node_to_stream = 'answer_generator'
     other_node_to_stream = 'guidelines_generator'
+    # set thread for configuration
     model_config = {"configurable": {"thread_id": "1"}}
 
     async for event in helper_graph.astream_events({"pdf_path": pdf_path, "messages": user_query}, model_config, version="v2"):
         # Get chat model tokens from a particular node
-
+        #print(event)
         if event["event"] == "on_chat_model_stream":
-            if event['metadata'].get('langgraph_node','') == node_to_stream or event['metadata'].get('langgraph_node','') == other_node_to_stream:
+            if event['metadata'].get('langgraph_node','') == node_to_stream or  event['metadata'].get('langgraph_node','') == other_node_to_stream:
                 data = event["data"]
                 yield data["chunk"].content
