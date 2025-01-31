@@ -1,5 +1,5 @@
 import streamlit as st
-from pdf_rag import graph_streamer
+from pdf_graph import graph_streamer
 from langchain_core.messages import AIMessage, HumanMessage
 import fitz  # PyMuPDF
 from PIL import Image
