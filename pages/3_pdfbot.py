@@ -53,7 +53,7 @@ async def get_response(pdf_name, message_list):
     responses = []
     async for response in graph_streamer(pdf_name, message_list):
         responses.append(response)
-    return ' '.join(responses)  # Join all responses if there are multiple parts
+    return ''.join(responses)  # Join all responses if there are multiple parts
 
 # Initialize session state messages if not already done
 if "messages" not in st.session_state:
